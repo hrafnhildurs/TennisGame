@@ -9,6 +9,9 @@
 		var ballSpeedX = 10;
 		var ballSpeedY = 4;
 
+		var	player1Score = 0;
+		var player2Score = 0;
+
 		var leftPaddleY = 250;
 		var rightPaddleY = 250;
 		const PADDLE_HEIGHT = 100;
@@ -48,7 +51,18 @@
 			ballY = canvas.height/2;
 		}
 
+		function computerMovement() {
+			var rightPaddleYCenter = rightPaddleY + (PADDLE_HEIGHT/2);
+			if(rightPaddleYCenter < ballY-35) {
+				rightPaddleY += 6; 
+			}
+			else if(rightPaddleYCenter > ballY+35) {
+				rightPaddleY -= 6;
+			}
+		}
+
 		function moveEverything() {
+			computerMovement();
 			//move the ball
 			ballX += ballSpeedX;
 			ballY += ballSpeedY;
@@ -61,6 +75,7 @@
 				//missed the paddle so ball reset
 				else {
 					ballReset();
+					player2Score++;
 				}
 			}
 			//ball crossing the right side
@@ -72,6 +87,7 @@
 				//missed the paddle so ball reset
 				else {
 					ballReset();
+					player1Score++;
 				}
 			}
 			//make the ball bounce back from the top
@@ -93,6 +109,9 @@
 			colorRect(canvas.width-PADDLE_THICKNESS, rightPaddleY, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white');
 			//draws the ball
 			colorCirle(ballX, ballY, 10, 'white');
+
+			canvasContext.fillText(player1Score, 100, 100);
+			canvasContext.fillText(player2Score, canvas.width-100, 100);
 		}
 
 		function colorCirle(centerX, centerY, radius, drawColor) {
