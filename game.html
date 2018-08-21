@@ -4,6 +4,7 @@
 		var canvas;
 		var canvasContext;
 		var ballX = 50;
+		var ballSpeedX = 5;
 
 		window.onload = function() {
 			console.log("Hello World!");
@@ -18,16 +19,39 @@
 		}
 
 		function moveEverything() {
-			ballX += 5;
+			//move the ball
+			ballX += ballSpeedX;
+			//make the ball bounce back from the left
+			if(ballX < 0) {
+				ballSpeedX = -ballSpeedX;
+			}
+			//make the ball bounce back from the right
+			if(ballX > canvas.width) {
+				ballSpeedX = -ballSpeedX;
+			}
 		}
 
-		function drawEverything() {
-			canvasContext.fillStyle = 'black';
-			canvasContext.fillRect(0,0,canvas.width,canvas.height);			
-			canvasContext.fillStyle = 'white';
-			canvasContext.fillRect(0,210,10,100);
-			canvasContext.fillStyle = 'red';
-			canvasContext.fillRect(ballX,100,10,10);
+		function drawEverything() {	
+			//colors the canvas black
+			colorRect(0, 0, canvas.width, canvas.height, 'black');
+			//left player paddle
+			colorRect(0, 210, 10, 100, 'white');
+			//right player paddle
+			colorRect(canvas.width-10, 210, 10, 100, 'white');
+			//draws the ball
+			colorCirle(ballX, 150, 10, 'white');
+		}
+
+		function colorCirle(centerX, centerY, radius, drawColor) {
+			canvasContext.fillStyle = drawColor;
+			canvasContext.beginPath();
+			canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2,true);
+			canvasContext.fill();
+		}
+
+		function colorRect(leftX, topY, width, height, drawColor) {
+			canvasContext.fillStyle = drawColor;
+			canvasContext.fillRect(leftX,topY,width,height);		
 		}
 	</script>
 </html>
