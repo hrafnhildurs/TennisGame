@@ -9,8 +9,10 @@
 		var ballSpeedX = 10;
 		var ballSpeedY = 4;
 
-		var leftPaddleY= 250;
+		var leftPaddleY = 250;
+		var rightPaddleY = 250;
 		const PADDLE_HEIGHT = 100;
+		const PADDLE_THICKNESS = 10;
 
 		function calculateMousePos(evt) {
 			var rect = canvas.getBoundingClientRect();
@@ -40,17 +42,37 @@
 												})
 		}
 
+		function ballReset() {
+			ballSpeedX = -ballSpeedX;
+			ballX = canvas.width/2;
+			ballY = canvas.height/2;
+		}
+
 		function moveEverything() {
 			//move the ball
 			ballX += ballSpeedX;
 			ballY += ballSpeedY;
-			//make the ball bounce back from the left
+			//ball crossing the left side
 			if(ballX < 0) {
-				ballSpeedX = -ballSpeedX;
+				//if the ball hits the paddle, bounce back
+				if(ballY > leftPaddleY && ballY < leftPaddleY+PADDLE_HEIGHT) {
+					ballSpeedX = -ballSpeedX;
+				}
+				//missed the paddle so ball reset
+				else {
+					ballReset();
+				}
 			}
-			//make the ball bounce back from the right
+			//ball crossing the right side
 			if(ballX > canvas.width) {
-				ballSpeedX = -ballSpeedX;
+				//if the ball hits the paddle, bounce back
+				if(ballY > rightPaddleY && ballY < rightPaddleY+PADDLE_HEIGHT) {
+					ballSpeedX = -ballSpeedX;
+				}
+				//missed the paddle so ball reset
+				else {
+					ballReset();
+				}
 			}
 			//make the ball bounce back from the top
 			if(ballY < 0) {
@@ -66,9 +88,9 @@
 			//colors the canvas black
 			colorRect(0, 0, canvas.width, canvas.height, 'black');
 			//left player paddle
-			colorRect(0, leftPaddleY, 10, PADDLE_HEIGHT, 'white');
-			//right player paddle
-			colorRect(canvas.width-10, 210, 10, PADDLE_HEIGHT, 'white');
+			colorRect(0, leftPaddleY, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white');
+			//right computer player paddle
+			colorRect(canvas.width-PADDLE_THICKNESS, rightPaddleY, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white');
 			//draws the ball
 			colorCirle(ballX, ballY, 10, 'white');
 		}
